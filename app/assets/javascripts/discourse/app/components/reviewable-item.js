@@ -2,13 +2,13 @@ import Category from "discourse/models/category";
 import Component from "@ember/component";
 import I18n from "I18n";
 import { ajax } from "discourse/lib/ajax";
-import bootbox from "bootbox";
 import { classify, dasherize } from "@ember/string";
 import discourseComputed, { bind } from "discourse-common/utils/decorators";
 import optionalService from "discourse/lib/optional-service";
 import { popupAjaxError } from "discourse/lib/ajax-error";
 import { set } from "@ember/object";
 import showModal from "discourse/lib/show-modal";
+import { inject as service } from "@ember/service";
 
 let _components = {};
 
@@ -22,6 +22,7 @@ export function addPluginReviewableParam(reviewableType, param) {
 
 export default Component.extend({
   adminTools: optionalService(),
+  dialog: service(),
   tagName: "",
   updating: null,
   editing: false,
@@ -264,14 +265,14 @@ export default Component.extend({
         return;
       }
 
-      let msg = action.get("confirm_message");
+      let message = action.get("confirm_message");
       let requireRejectReason = action.get("require_reject_reason");
       let customModal = action.get("custom_modal");
-      if (msg) {
-        bootbox.confirm(msg, (answer) => {
-          if (answer) {
-            return this._performConfirmed(action);
-          }
+
+      if (message) {
+        this.dialog.confirm({
+          message,
+          didConfirm: () => this._performConfirmed(action),
         });
       } else if (requireRejectReason) {
         showModal("reject-reason-reviewable", {

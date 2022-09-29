@@ -2,7 +2,6 @@ import { alias, notEmpty } from "@ember/object/computed";
 import Controller from "@ember/controller";
 import I18n from "I18n";
 import { ajax } from "discourse/lib/ajax";
-import bootbox from "bootbox";
 import discourseComputed from "discourse-common/utils/decorators";
 import { popupAjaxError } from "discourse/lib/ajax-error";
 import showModal from "discourse/lib/show-modal";
@@ -86,23 +85,20 @@ export default Controller.extend({
                   tags: joinedTags,
                 });
 
-          const string = I18n.t("tagging.delete_unused_confirmation", {
+          const message = I18n.t("tagging.delete_unused_confirmation", {
             count: tags.length,
             tags: tagsString,
           });
 
-          bootbox.confirm(
-            string,
-            I18n.t("tagging.cancel_delete_unused"),
-            I18n.t("tagging.delete_unused"),
-            (proceed) => {
-              if (proceed) {
-                ajax("/tags/unused", { type: "DELETE" })
-                  .then(() => this.send("triggerRefresh"))
-                  .catch(popupAjaxError);
-              }
-            }
-          );
+          this.dialog.deleteConfirm({
+            message,
+            confirmButtonLabel: "tagging.delete_unused",
+            didConfirm: () => {
+              return ajax("/tags/unused", { type: "DELETE" })
+                .then(() => this.send("triggerRefresh"))
+                .catch(popupAjaxError);
+            },
+          });
         })
         .catch(popupAjaxError);
     },

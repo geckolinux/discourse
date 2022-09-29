@@ -2,11 +2,11 @@ import { and, reads } from "@ember/object/computed";
 import Component from "@ember/component";
 import I18n from "I18n";
 import { ajax } from "discourse/lib/ajax";
-import bootbox from "bootbox";
 import discourseComputed from "discourse-common/utils/decorators";
 import { isEmpty } from "@ember/utils";
 import { popupAjaxError } from "discourse/lib/ajax-error";
 import { inject as service } from "@ember/service";
+import { htmlSafe } from "@ember/template";
 
 export default Component.extend({
   dialog: service(),
@@ -123,33 +123,29 @@ export default Component.extend({
     },
 
     deleteSynonym(tag) {
-      bootbox.confirm(
-        I18n.t("tagging.delete_synonym_confirm", { tag_name: tag.text }),
-        (result) => {
-          if (!result) {
-            return;
-          }
-
-          tag
+      this.dialog.yesNoConfirm({
+        message: I18n.t("tagging.delete_synonym_confirm", {
+          tag_name: tag.text,
+        }),
+        didConfirm: () => {
+          return tag
             .destroyRecord()
             .then(() => this.tagInfo.synonyms.removeObject(tag))
             .catch(popupAjaxError);
-        }
-      );
+        },
+      });
     },
 
     addSynonyms() {
-      bootbox.confirm(
-        I18n.t("tagging.add_synonyms_explanation", {
-          count: this.newSynonyms.length,
-          tag_name: this.tagInfo.name,
-        }),
-        (result) => {
-          if (!result) {
-            return;
-          }
-
-          ajax(`/tag/${this.tagInfo.name}/synonyms`, {
+      this.dialog.confirm({
+        message: htmlSafe(
+          I18n.t("tagging.add_synonyms_explanation", {
+            count: this.newSynonyms.length,
+            tag_name: this.tagInfo.name,
+          })
+        ),
+        didConfirm: () => {
+          return ajax(`/tag/${this.tagInfo.name}/synonyms`, {
             type: "POST",
             data: {
               synonyms: this.newSynonyms,
@@ -170,8 +166,8 @@ export default Component.extend({
               }
             })
             .catch(popupAjaxError);
-        }
-      );
+        },
+      });
     },
   },
 });
