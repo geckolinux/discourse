@@ -9,7 +9,7 @@ import discourseLater from "discourse-common/lib/later";
 import { relativeAge } from "discourse/lib/formatter";
 import renderTags from "discourse/lib/render-tags";
 import renderTopicFeaturedLink from "discourse/lib/render-topic-featured-link";
-import { hideTutorial, showTutorial } from "discourse/lib/tutorial";
+import { hidePopup, showPopup } from "discourse/lib/popup";
 
 const SCROLLER_HEIGHT = 50;
 const LAST_READ_HEIGHT = 20;
@@ -601,12 +601,12 @@ export default createWidget("topic-timeline", {
   },
 
   didRenderWidget() {
-    showTutorial({
+    showPopup({
       currentUser: this.currentUser,
-      tutorial: "topic-timeline",
+      popup: "topic-timeline",
 
-      titleText: I18n.t("tutorial.topic_timeline.title"),
-      contentText: I18n.t("tutorial.topic_timeline.content"),
+      titleText: I18n.t("popup.topic_timeline.title"),
+      contentText: I18n.t("popup.topic_timeline.content"),
 
       reference: document.querySelector("div.timeline-scrollarea-wrapper"),
 
@@ -615,10 +615,10 @@ export default createWidget("topic-timeline", {
   },
 
   destroy() {
-    hideTutorial("topic-timeline");
+    hidePopup("topic-timeline");
   },
 
   willRerenderWidget() {
-    hideTutorial("topic-timeline");
+    hidePopup("topic-timeline");
   },
 });

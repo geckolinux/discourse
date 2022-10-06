@@ -15,7 +15,7 @@ import { prioritizeNameInUx } from "discourse/lib/settings";
 import { dasherize } from "@ember/string";
 import { emojiUnescape } from "discourse/lib/text";
 import { escapeExpression, modKeysPressed } from "discourse/lib/utilities";
-import { hideTutorialForever } from "discourse/lib/tutorial";
+import { hidePopupForever } from "discourse/lib/popup";
 
 export default Component.extend(CardContentsBase, CanCheckEmails, CleansUp, {
   elementId: "user-card",
@@ -180,7 +180,7 @@ export default Component.extend(CardContentsBase, CanCheckEmails, CleansUp, {
   },
 
   _showCallback(username, $target) {
-    hideTutorialForever(this.currentUser, "user-card");
+    hidePopupForever(this.currentUser, "user-card");
 
     this._positionCard($target);
     this.setProperties({ visible: true, loading: true });

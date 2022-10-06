@@ -12,7 +12,7 @@ import { wantsNewWindow } from "discourse/lib/intercept-click";
 import { logSearchLinkClick } from "discourse/lib/search";
 import RenderGlimmer from "discourse/widgets/render-glimmer";
 import { hbs } from "ember-cli-htmlbars";
-import { hideTutorial, showTutorial } from "discourse/lib/tutorial";
+import { hidePopup, showPopup } from "discourse/lib/popup";
 
 let _extraHeaderIcons = [];
 
@@ -156,13 +156,13 @@ createWidget("header-notifications", {
       return;
     }
 
-    showTutorial({
+    showPopup({
       currentUser: this.currentUser,
-      tutorial: "first-notification",
+      popup: "first-notification",
 
-      titleText: I18n.t("tutorial.first_notification.title"),
-      contentText: I18n.t("tutorial.first_notification.content"),
-      primaryBtnText: I18n.t("tutorial.first_notification.primary"),
+      titleText: I18n.t("popup.first_notification.title"),
+      contentText: I18n.t("popup.first_notification.content"),
+      primaryBtnText: I18n.t("popup.first_notification.primary"),
 
       reference: document
         .querySelector(".badge-notification")
@@ -173,11 +173,11 @@ createWidget("header-notifications", {
   },
 
   destroy() {
-    hideTutorial("first-notification");
+    hidePopup("first-notification");
   },
 
   willRerenderWidget() {
-    hideTutorial("first-notification");
+    hidePopup("first-notification");
   },
 });
 

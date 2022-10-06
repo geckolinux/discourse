@@ -1803,7 +1803,7 @@ en:
       what_are_you_doing: "What are you doing?"
       remove_status: "Remove status"
 
-    tutorial:
+    popup:
       primary: "Got it!"
       secondary: "don't show me these tips"
 

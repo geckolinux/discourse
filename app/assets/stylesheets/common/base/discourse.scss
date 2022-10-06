@@ -570,26 +570,26 @@ table {
   animation-name: ping;
 }
 
-.tutorial-popup-container {
+.popup-popup-container {
   align-items: center;
   display: flex;
   padding: 0.5em;
   text-align: left;
 
-  .tutorial-popup {
+  .popup-popup {
     min-width: 300px;
   }
 
-  .tutorial-title {
+  .popup-title {
     font-size: $font-up-2;
     font-weight: bold;
   }
 
-  .tutorial-content {
+  .popup-content {
     margin-top: 0.25em;
   }
 
-  .tutorial-buttons {
+  .popup-buttons {
     margin-top: 1em;
   }
 }

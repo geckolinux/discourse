@@ -2,15 +2,15 @@ import { iconHTML } from "discourse-common/lib/icon-library";
 import I18n from "I18n";
 import tippy from "tippy.js";
 
-const GLOBAL_TUTORIALS_KEY = "new_user_tips";
-const TUTORIAL_KEYS = ["first-notification", "topic-timeline"];
+const GLOBAL_POPUPS_KEY = "new_user_tips";
+const POPUP_KEYS = ["first-notification", "topic-timeline"];
 
 const instances = {};
 const queue = [];
 
 // Plugin used to implement actions of the two buttons
-const TutorialPlugin = {
-  name: "tutorial",
+const PopupPlugin = {
+  name: "popup",
 
   fn(instance) {
     return {
@@ -18,8 +18,8 @@ const TutorialPlugin = {
         instance.popper
           .querySelector(".btn-primary")
           .addEventListener("click", (event) => {
-            const { currentUser, tutorial } = instance.props;
-            hideTutorialForever(currentUser, tutorial);
+            const { currentUser, popup } = instance.props;
+            hidePopupForever(currentUser, popup);
             event.preventDefault();
           });
 
@@ -27,7 +27,7 @@ const TutorialPlugin = {
           .querySelector(".btn-flat")
           .addEventListener("click", (event) => {
             const { currentUser } = instance.props;
-            hideTutorialForever(currentUser, GLOBAL_TUTORIALS_KEY);
+            hidePopupForever(currentUser, GLOBAL_POPUPS_KEY);
             event.preventDefault();
           });
       },
@@ -35,17 +35,17 @@ const TutorialPlugin = {
   },
 };
 
-function getUserOptionKey(tutorial) {
-  return `skip_${tutorial.replaceAll("-", "_")}`;
+function getUserOptionKey(popup) {
+  return `skip_${popup.replaceAll("-", "_")}`;
 }
 
-export function showTutorial(options) {
-  hideTutorial(options.tutorial);
+export function showPopup(options) {
+  hidePopup(options.popup);
 
   if (
     !options.reference ||
     !options.currentUser ||
-    options.currentUser.get(getUserOptionKey(options.tutorial))
+    options.currentUser.get(getUserOptionKey(options.popup))
   ) {
     return;
   }
@@ -54,16 +54,16 @@ export function showTutorial(options) {
     return addToQueue(options);
   }
 
-  instances[options.tutorial] = tippy(options.reference, {
+  instances[options.popup] = tippy(options.reference, {
     placement: options.placement,
 
-    plugins: [TutorialPlugin],
+    plugins: [PopupPlugin],
 
-    // Current user is used to keep track of tutorials.
+    // Current user is used to keep track of popups.
     currentUser: options.currentUser,
 
     // Key used to save state.
-    tutorial: options.tutorial,
+    popup: options.popup,
 
     // Tippy must be displayed as soon as possible and not be hidden unless
     // the user clicks on one of the two buttons.
@@ -87,16 +87,16 @@ export function showTutorial(options) {
     // The `content` property below is HTML.
     allowHTML: true,
 
-    content: `<div class='tutorial-popup-container'>
-        <div class='tutorial-popup'>
-          <div class='tutorial-title'>${options.titleText}</div>
-          <div class='tutorial-content'>${options.contentText}</div>
-          <div class='tutorial-buttons'>
+    content: `<div class='popup-popup-container'>
+        <div class='popup-popup'>
+          <div class='popup-title'>${options.titleText}</div>
+          <div class='popup-content'>${options.contentText}</div>
+          <div class='popup-buttons'>
             <button class="btn btn-primary">${
-              options.primaryBtnText || I18n.t("tutorial.primary")
+              options.primaryBtnText || I18n.t("popup.primary")
             }</button>
             <button class="btn btn-flat btn-text">${
-              options.secondaryBtnText || I18n.t("tutorial.secondary")
+              options.secondaryBtnText || I18n.t("popup.secondary")
             }</button>
           </div>
         </div>
@@ -104,33 +104,31 @@ export function showTutorial(options) {
   });
 }
 
-export function hideTutorial(tutorial) {
-  const instance = instances[tutorial];
+export function hidePopup(popup) {
+  const instance = instances[popup];
   if (instance && !instance.state.isDestroyed) {
     instance.destroy();
   }
-  delete instances[tutorial];
+  delete instances[popup];
 }
 
-export function hideTutorialForever(user, tutorial) {
+export function hidePopupForever(user, popup) {
   if (!user) {
     return;
   }
 
-  const tutorials =
-    tutorial === GLOBAL_TUTORIALS_KEY
-      ? [GLOBAL_TUTORIALS_KEY, ...TUTORIAL_KEYS]
-      : [tutorial];
+  const popups =
+    popup === GLOBAL_POPUPS_KEY ? [GLOBAL_POPUPS_KEY, ...POPUP_KEYS] : [popup];
 
   // Destroy tippy instances
-  tutorials.forEach(hideTutorial);
+  popups.forEach(hidePopup);
 
   // Update user options
   if (!user.user_option) {
     user.set("user_option", {});
   }
 
-  const userOptionKeys = tutorials.map(getUserOptionKey);
+  const userOptionKeys = popups.map(getUserOptionKey);
   let updates = false;
   userOptionKeys.forEach((key) => {
     if (!user.get(key)) {
@@ -140,15 +138,15 @@ export function hideTutorialForever(user, tutorial) {
     }
   });
 
-  // Show next tutorial in queue
-  showNextTutorial();
+  // Show next popup in queue
+  showNextPopup();
 
   return updates ? user.save(userOptionKeys) : Promise.resolve();
 }
 
 function addToQueue(options) {
   for (let i = 0; i < queue.size; ++i) {
-    if (queue[i].tutorial === options.tutorial) {
+    if (queue[i].popup === options.popup) {
       queue[i] = options;
       return;
     }
@@ -157,9 +155,9 @@ function addToQueue(options) {
   queue.push(options);
 }
 
-function showNextTutorial() {
+function showNextPopup() {
   const options = queue.shift();
   if (options) {
-    showTutorial(options);
+    showPopup(options);
   }
 }
