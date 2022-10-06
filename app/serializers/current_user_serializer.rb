@@ -69,9 +69,7 @@ class CurrentUserSerializer < BasicUserSerializer
              :featured_topic,
              :skip_new_user_tips,
              :skip_first_notification,
-             :skip_post_menu,
              :skip_topic_timeline,
-             :skip_user_card,
              :do_not_disturb_until,
              :has_topic_draft,
              :can_review,
@@ -290,16 +288,8 @@ class CurrentUserSerializer < BasicUserSerializer
     object.user_option.skip_first_notification
   end
 
-  def skip_post_menu
-    object.user_option.skip_post_menu
-  end
-
   def skip_topic_timeline
     object.user_option.skip_topic_timeline
-  end
-
-  def skip_user_card
-    object.user_option.skip_user_card
   end
 
   def include_primary_group_id?

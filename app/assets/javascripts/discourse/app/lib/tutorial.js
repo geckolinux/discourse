@@ -3,13 +3,7 @@ import I18n from "I18n";
 import tippy from "tippy.js";
 
 const GLOBAL_TUTORIALS_KEY = "new_user_tips";
-
-const TUTORIAL_KEYS = [
-  "first-notification",
-  "post-menu",
-  "topic-timeline",
-  "user-card",
-];
+const TUTORIAL_KEYS = ["first-notification", "topic-timeline"];
 
 const instances = {};
 const queue = [];

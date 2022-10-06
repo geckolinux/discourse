@@ -25,7 +25,6 @@ import { transformBasicPost } from "discourse/lib/transform-post";
 import autoGroupFlairForUser from "discourse/lib/avatar-flair";
 import showModal from "discourse/lib/show-modal";
 import { nativeShare } from "discourse/lib/pwa-utils";
-import { hideTutorial, showTutorial } from "discourse/lib/tutorial";
 
 function transformWithCallbacks(post) {
   let transformed = transformBasicPost(post);
@@ -922,50 +921,5 @@ export default createWidget("post", {
       this.dialog.alert(I18n.t("post.few_likes_left"));
       kvs.set({ key: "lastWarnedLikes", value: Date.now() });
     }
-  },
-
-  didRenderWidget() {
-    if (this.attrs.post_number !== 1) {
-      return;
-    }
-
-    const post = document.querySelector("#post_1");
-    if (!post) {
-      return;
-    }
-
-    showTutorial({
-      currentUser: this.currentUser,
-      tutorial: "post-menu",
-
-      titleText: I18n.t("tutorial.post_menu.title"),
-      contentText: I18n.t("tutorial.post_menu.content"),
-
-      reference: post.querySelector(".post-controls .actions"),
-
-      placement: "top",
-    });
-
-    showTutorial({
-      currentUser: this.currentUser,
-      tutorial: "user-card",
-
-      titleText: I18n.t("tutorial.user_card.title"),
-      contentText: I18n.t("tutorial.user_card.content"),
-
-      reference: post.querySelector(".post-avatar .trigger-user-card"),
-
-      placement: "right",
-    });
-  },
-
-  destroy() {
-    hideTutorial("post-menu");
-    hideTutorial("user-card");
-  },
-
-  willRerenderWidget() {
-    hideTutorial("post-menu");
-    hideTutorial("user-card");
   },
 });

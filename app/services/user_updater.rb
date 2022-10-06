@@ -19,9 +19,7 @@ class UserUpdater
 
   TUTORIAL_OPTION_ATTR = [
     :skip_first_notification,
-    :skip_post_menu,
     :skip_topic_timeline,
-    :skip_user_card,
   ]
 
   OPTION_ATTR = [

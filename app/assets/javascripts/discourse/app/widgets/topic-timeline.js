@@ -9,7 +9,6 @@ import discourseLater from "discourse-common/lib/later";
 import { relativeAge } from "discourse/lib/formatter";
 import renderTags from "discourse/lib/render-tags";
 import renderTopicFeaturedLink from "discourse/lib/render-topic-featured-link";
-import getURL from "discourse-common/lib/get-url";
 import { hideTutorial, showTutorial } from "discourse/lib/tutorial";
 
 const SCROLLER_HEIGHT = 50;
@@ -608,7 +607,6 @@ export default createWidget("topic-timeline", {
 
       titleText: I18n.t("tutorial.topic_timeline.title"),
       contentText: I18n.t("tutorial.topic_timeline.content"),
-      educationImage: getURL("/images/education/topic-timeline.png"),
 
       reference: document.querySelector("div.timeline-scrollarea-wrapper"),
 
