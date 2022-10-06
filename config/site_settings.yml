@@ -379,6 +379,8 @@ basic:
   enable_user_status:
     client: true
     default: false
+  enable_onboarding_popups:
+    default: false
 
 login:
   invite_only:
