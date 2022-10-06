@@ -36,7 +36,7 @@ const PopupPlugin = {
 };
 
 function getUserOptionKey(popup) {
-  return `skip_${popup.replaceAll("-", "_")}`;
+  return `skip_${popup.replaceAll("-", "_")}_tips`;
 }
 
 export function showPopup(options) {

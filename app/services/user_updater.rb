@@ -18,8 +18,8 @@ class UserUpdater
   }
 
   POPUP_OPTION_ATTR = [
-    :skip_first_notification,
-    :skip_topic_timeline,
+    :skip_first_notification_tips,
+    :skip_topic_timeline_tips,
   ]
 
   OPTION_ATTR = [

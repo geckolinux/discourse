@@ -104,8 +104,8 @@ let userOptionFields = [
   "title_count_mode",
   "timezone",
   "skip_new_user_tips",
-  "skip_first_notification",
-  "skip_topic_timeline",
+  "skip_first_notification_tips",
+  "skip_topic_timeline_tips",
   "default_calendar",
   "bookmark_auto_delete_preference",
 ];
